@@ -16,8 +16,6 @@ from datetime import datetime,timezone, timedelta
 if st.query_params.get("trigger") == "update":
     with st.spinner("Call API", show_time=True):
 
-
-
         def generate_signature(secret_key, timestamp):
             payload = timestamp.encode('utf-8')
             secret_key = secret_key.encode('utf-8')
