@@ -146,7 +146,7 @@ if st.query_params.get("trigger") == "update":
         df_all_detail['date'] = pd.to_datetime(df_all_detail['date'])
         df_all_detail['nilai'] = pd.to_numeric(df_all_detail['nilai'])
         df_update_journal = pd.DataFrame(update_journal)
-        df_update_journal['date'] = pd.to_datetime(df_update_journal['date'], errors='cource')
+        df_update_journal['date'] = pd.to_datetime(df_update_journal['date'], errors='coerce')
         min_date = df_update_journal['date'].min()
         max_date = df_update_journal['date'].max()
         result = df_all_detail[
@@ -317,7 +317,7 @@ if st.button("Update Data"):
         df_all_detail['date'] = pd.to_datetime(df_all_detail['date'])
         df_all_detail['nilai'] = pd.to_numeric(df_all_detail['nilai'])
         df_update_journal = pd.DataFrame(update_journal)
-        df_update_journal['date'] = pd.to_datetime(df_update_journal['date'], errors='cource')
+        df_update_journal['date'] = pd.to_datetime(df_update_journal['date'], errors='coerce')
         min_date = df_update_journal['date'].min()
         max_date = df_update_journal['date'].max()
         result = df_all_detail[
