@@ -323,31 +323,32 @@ if st.button("Update Data"):
         result = df_all_detail[
             (df_all_detail['date'] < min_date) | (df_all_detail['date'] > max_date)
         ]
-        result = pd.concat([result, df_update_journal], ignore_index=True)
-        for_json = result.copy()
-        for_json['date'] = for_json['date'].dt.strftime('%-m/%-d/%Y')
-        update_data("1cjR6k-OCWmeSfCRS_3b9B3wgQc8a-d_pIvWzcZpz1Uw","JSON",for_json)
-        result['Debit'] = result.apply(lambda x: x['nilai'] if x['type'] == 'DEBIT' else 0, axis=1)
-        result['Credit'] = result.apply(lambda x: x['nilai'] if x['type'] == 'CREDIT' else 0, axis=1)
+        st.dataframe(df_all_detail)
+    #     result = pd.concat([result, df_update_journal], ignore_index=True)
+    #     for_json = result.copy()
+    #     for_json['date'] = for_json['date'].dt.strftime('%-m/%-d/%Y')
+    #     update_data("1cjR6k-OCWmeSfCRS_3b9B3wgQc8a-d_pIvWzcZpz1Uw","JSON",for_json)
+    #     result['Debit'] = result.apply(lambda x: x['nilai'] if x['type'] == 'DEBIT' else 0, axis=1)
+    #     result['Credit'] = result.apply(lambda x: x['nilai'] if x['type'] == 'CREDIT' else 0, axis=1)
         
-    with st.spinner("Update Data ke Google Sheet", show_time=True):
-        final_google = result[result['akun'].str.contains("Driver")]
-        final_google = final_google.sort_values('date')
-        final_google['Balance'] = (
-        final_google['Debit'] - final_google['Credit']  # pakai 'Kredit' jika sudah rename
-    ).groupby(final_google['akun']).cumsum()
+    # with st.spinner("Update Data ke Google Sheet", show_time=True):
+    #     final_google = result[result['akun'].str.contains("Driver")]
+    #     final_google = final_google.sort_values('date')
+    #     final_google['Balance'] = (
+    #     final_google['Debit'] - final_google['Credit']  # pakai 'Kredit' jika sudah rename
+    # ).groupby(final_google['akun']).cumsum()
 
-        final_google['Saldo'] = np.where(final_google['Debit'] == 0, final_google['Credit'] * -1, 
-                                                np.where(final_google['Credit'] == 0, final_google['Debit'], np.nan))
+    #     final_google['Saldo'] = np.where(final_google['Debit'] == 0, final_google['Credit'] * -1, 
+    #                                             np.where(final_google['Credit'] == 0, final_google['Debit'], np.nan))
 
-        # Fill NaN values if needed (optional)
-        final_google['Saldo'] = final_google['Saldo'].fillna(0)
-        final_google['Driver Name'] = final_google['akun'].str.replace('Driver - ', '', regex=False)
-        final_google['date'] = final_google['date'].dt.strftime('%m/%d/%Y')
-        final_google = final_google[['akun', 'Driver Name', 'date', 'memo', 'Debit', 'Credit', 'Balance', 'Saldo']]
-        final_google = final_google.fillna("")
-        final_google.rename(columns={'Credit': 'Kredit', 'akun':'Nama Perkiraan', 'date':'Tanggal', 'memo': 'Deskripsi'}, inplace=True)
-        update_data("1cjR6k-OCWmeSfCRS_3b9B3wgQc8a-d_pIvWzcZpz1Uw","Valentio",final_google)
+    #     # Fill NaN values if needed (optional)
+    #     final_google['Saldo'] = final_google['Saldo'].fillna(0)
+    #     final_google['Driver Name'] = final_google['akun'].str.replace('Driver - ', '', regex=False)
+    #     final_google['date'] = final_google['date'].dt.strftime('%m/%d/%Y')
+    #     final_google = final_google[['akun', 'Driver Name', 'date', 'memo', 'Debit', 'Credit', 'Balance', 'Saldo']]
+    #     final_google = final_google.fillna("")
+    #     final_google.rename(columns={'Credit': 'Kredit', 'akun':'Nama Perkiraan', 'date':'Tanggal', 'memo': 'Deskripsi'}, inplace=True)
+    #     update_data("1cjR6k-OCWmeSfCRS_3b9B3wgQc8a-d_pIvWzcZpz1Uw","Valentio",final_google)
         st.success("Berhasil Update!!!")
         
         
